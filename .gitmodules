@@ -1,0 +1,9 @@
+[submodule "third_party/boringssl/src"]
+	path = third_party/boringssl/src
+	url = https://boringssl.googlesource.com/boringssl
+[submodule "third_party/lsquic"]
+	path = third_party/lsquic
+	url = https://github.com/litespeedtech/lsquic.git
+[submodule "c_src/ex_quic/libev"]
+	path = c_src/ex_quic/libev
+	url = https://github.com/enki/libev

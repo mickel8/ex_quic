@@ -4,10 +4,13 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 #include <openssl/ssl.h>
 #include <openssl/crypto.h>
 
-#include "net.h"
 #include "client.h"
 
 static int send_packets_out(void *ctx, const struct lsquic_out_spec *specs, unsigned n_specs)
@@ -205,7 +208,9 @@ UNIFEX_TERM init(UnifexEnv *env, char *remote_ip, int remote_port) {
 
     state->sockfd = sockfd;
 
-    state->peer_addr = new_addr(remote_ip, remote_port);
+    state->peer_addr.sin_family = AF_INET;
+    state->peer_addr.sin_port = htons(remote_port);
+    state->peer_addr.sin_addr.s_addr = inet_addr(remote_ip);
 
     lsquic_engine_init_settings(&state->engine_settings, 0);
     state->engine_settings.es_ecn = 0;

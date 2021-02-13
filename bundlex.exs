@@ -10,15 +10,15 @@ defmodule ExQuic.BundlexProject do
   defp natives() do
     [
       client: [
-        sources: ["client.c", "lsquic_utils.c", "net.c"],
+        sources: ["client.c", "lsquic_utils.c"],
         deps: [unifex: :unifex],
         compiler_flags: ["-D_POSIX_SOURCE=1"],
         pkg_configs: ["zlib"],
         libs: ["lsquic", "ssl", "crypto"],
         lib_dirs: [
-          "/home/michal/Repos/ex_quic/third_party/lsquic/src/liblsquic",
-          "/home/michal/Repos/ex_quic/third_party/boringssl/ssl",
-          "/home/michal/Repos/ex_quic/third_party/boringssl/crypto"
+          Path.expand("./third_party/lsquic/src/liblsquic"),
+          Path.expand("./third_party/boringssl/ssl"),
+          Path.expand("./third_party/boringssl/crypto")
         ],
         includes: ["third_party/lsquic/include",
           "third_party/boringssl/include",

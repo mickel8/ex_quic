@@ -7,3 +7,6 @@
 [submodule "c_src/ex_quic/libev"]
 	path = c_src/ex_quic/libev
 	url = https://github.com/enki/libev
+[submodule "third_party/boringssl"]
+	path = third_party/boringssl
+	url = https://boringssl.googlesource.com/boringssl

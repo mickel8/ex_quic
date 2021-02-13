@@ -1,5 +1,6 @@
 *.iml
 .idea/
+.vscode/
 c_src/ex_quic/_generated/
 
 # The directory Mix will write compiled artifacts to.

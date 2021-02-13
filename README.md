@@ -1,15 +1,25 @@
 # ExQuic
+[![Hex.pm](https://img.shields.io/hexpm/v/ex_quic.svg)](https://hex.pm/packages/ex_quic)
+[![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](https://hexdocs.pm/ex_quic/)
 
-WIP
+Elixir wrapper over [lsquic].
 
-Elixir wrapper over QUIC implementation ([lsquic](https://github.com/litespeedtech/lsquic))
+ExQuic wraps [lsquic] for usage in Elixir.
+At this moment it provides very simple and limited client that is able to communicate with [echo_server].
 
-**TODO: Add description**
+Future plans:
+* extend client implementation
+* implement server side
+* add support for ECN
+* add support for HTTP/3
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `ex_quic` to your list of dependencies in `mix.exs`:
+To successfully include `ex_quic` in your project you need to install:
+* cmake
+* zlib
+
+The package can be installed by adding `ex_quic` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -19,7 +29,11 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/ex_quic](https://hexdocs.pm/ex_quic).
+# Architecture
+ExQuic uses [bundlex] and [unifex] for compiling and spawning CNode that is responsible for doing
+all QUIC stuff using [lsquic].
 
+[lsquic]: https://github.com/litespeedtech/lsquic
+[bundlex]: https://github.com/membraneframework/bundlex
+[unifex]: https://github.com/membraneframework/unifex
+[echo_server]: https://github.com/litespeedtech/lsquic/blob/master/bin/echo_server.c

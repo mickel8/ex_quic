@@ -14,7 +14,7 @@ defmodule Mix.Tasks.Compile.ThirdParty do
     Logger.info("Compiling boringssl")
     System.cmd("cmake", ["-DBUILD_SHARED_LIBS=1", "."], cd: "third_party/boringssl")
     System.cmd("make", [], cd: "third_party/boringssl")
-
+    Logger.info("boringssl compiled")
     Logger.info("Compiling lsquic")
 
     System.cmd("cmake", ["-DLSQUIC_SHARED_LIB=1", "-DBORINGSSL_DIR=../boringssl", "."],
@@ -22,7 +22,9 @@ defmodule Mix.Tasks.Compile.ThirdParty do
     )
 
     System.cmd("make", [], cd: "third_party/lsquic")
+    Logger.info("lsquic compiled")
 
+    Logger.info("Adding compiled libs to LD_LIBRARY_PATH")
     System.put_env("LD_LIBRARY_PATH", get_ld_lib_path())
     {:ok, []}
   end

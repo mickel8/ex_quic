@@ -14,7 +14,7 @@ defmodule ExQuic.BundlexProject do
         deps: [unifex: :unifex],
         compiler_flags: ["-D_POSIX_SOURCE=1"],
         pkg_configs: ["zlib"],
-        libs: ["lsquic", "ssl", "crypto"],
+        libs: ["lsquic", "ssl", "crypto", "m"],
         lib_dirs: [
           Path.expand("./third_party/lsquic/src/liblsquic"),
           Path.expand("./third_party/boringssl/ssl"),

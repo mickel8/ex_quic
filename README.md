@@ -1,6 +1,7 @@
 # ExQuic
 [![Hex.pm](https://img.shields.io/hexpm/v/ex_quic.svg)](https://hex.pm/packages/ex_quic)
 [![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](https://hexdocs.pm/ex_quic/)
+[![CI](https://github.com/mickel8/ex_quic/workflows/CI/badge.svg)](https://github.com/mickel8/ex_quic/actions)
 
 Elixir wrapper over [lsquic].
 
@@ -16,8 +17,9 @@ Future plans:
 ## Installation
 
 To successfully include `ex_quic` in your project you need to install:
-* cmake
-* zlib
+* cmake (for building boringssl and lsquic)
+* zlib (for lsquic)
+* libevent-dev (for lsquic)
 
 The package can be installed by adding `ex_quic` to your list of dependencies in `mix.exs`:
 

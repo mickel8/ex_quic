@@ -7,7 +7,7 @@ defmodule ExQuic.Client do
   Example usage
   ```
   defmodule ExampleClient do
-    use ExQuic.Client
+    @behaviour ExQuic.Client
 
     @impl true
     def handle_quic_payload({:quic_payload, _payload} = msg) do
@@ -16,52 +16,41 @@ defmodule ExQuic.Client do
     end
   end
 
-  {:ok, pid} = Example.start_link(remote_ip: "127.0.0.3", remote_port: 8989)
-  Example.send_payload(pid, "hello")
+  {:ok, pid} = ExQuic.Client.start_link(ExampleClient, remote_ip: "127.0.0.3", remote_port: 8989)
+  ExQuic.Client.send_payload(pid, "hello")
   ```
   """
+  use GenServer
+  require Unifex.CNode
 
   @callback handle_quic_payload(payload :: {:quic_payload, binary()}) :: :ok
 
-  defmacro __using__(_opts) do
-    quote location: :keep do
-      @behaviour ExQuic.Client
-      use GenServer
-      require Unifex.CNode
+  @spec start_link(module(), remote_ip: binary(), remote_port: 0..65535) :: {:ok, pid()}
+  def start_link(module, opts) do
+    GenServer.start_link(__MODULE__, [caller: module] ++ opts)
+  end
 
-      @impl true
-      def handle_quic_payload({:quic_payload, payload}), do: :ok
+  @spec send_payload(pid(), binary()) :: :ok
+  def send_payload(pid, payload) do
+    GenServer.call(pid, {:send_payload, payload})
+  end
 
-      defoverridable handle_quic_payload: 1
+  @impl true
+  def init(opts) do
+    {:ok, cnode} = Unifex.CNode.start_link(:client)
+    :ok = Unifex.CNode.call(cnode, :init, [opts[:remote_ip], opts[:remote_port]])
+    {:ok, %{:caller => opts[:caller], :cnode => cnode}}
+  end
 
-      @spec start_link(remote_ip: binary(), remote_port: 0..65535) :: {:ok, pid()}
-      def start_link(opts) do
-        GenServer.start_link(__MODULE__, opts)
-      end
+  @impl true
+  def handle_call({:send_payload, payload}, _from, state) do
+    Unifex.CNode.call(state.cnode, :send_payload, [payload])
+    {:reply, :ok, state}
+  end
 
-      @spec send_payload(pid(), binary()) :: :ok
-      def send_payload(pid, payload) do
-        GenServer.call(pid, {:send_payload, payload})
-      end
-
-      @impl true
-      def init(opts) do
-        {:ok, cnode} = Unifex.CNode.start_link(:client)
-        :ok = Unifex.CNode.call(cnode, :init, [opts[:remote_ip], opts[:remote_port]])
-        {:ok, %{:cnode => cnode}}
-      end
-
-      @impl true
-      def handle_call({:send_payload, payload}, _from, state) do
-        Unifex.CNode.call(state.cnode, :send_payload, [payload])
-        {:reply, :ok, state}
-      end
-
-      @impl true
-      def handle_info({:quic_payload, _payload} = msg, state) do
-        handle_quic_payload(msg)
-        {:noreply, state}
-      end
-    end
+  @impl true
+  def handle_info({:quic_payload, _payload} = msg, %{caller: module} = state) do
+    module.handle_quic_payload(msg)
+    {:noreply, state}
   end
 end

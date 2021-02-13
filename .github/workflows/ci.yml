@@ -10,6 +10,7 @@ jobs:
         with:
           otp-version: '23.0'
           elixir-version: '1.10.4'
+      - run: git submodule update --init --recursive
       - run: sudo apt install libevent-dev
       - run: mix deps.get
       - run: mix test

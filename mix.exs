@@ -1,7 +1,7 @@
 defmodule ExQuic.MixProject do
   use Mix.Project
 
-  @version "0.1.1"
+  @version "0.1.2"
   @github_url "https://github.com/mickel8/ex_quic"
 
   def project do
@@ -41,7 +41,6 @@ defmodule ExQuic.MixProject do
 
   defp package do
     [
-      maintainers: ["Membrane Team"],
       licenses: ["MIT"],
       links: %{"GitHub" => @github_url},
       files: [

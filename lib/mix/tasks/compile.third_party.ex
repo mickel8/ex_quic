@@ -11,9 +11,6 @@ defmodule Mix.Tasks.Compile.ThirdParty do
 
   @impl true
   def run(_args) do
-    Logger.info("Downloading repositories")
-    System.cmd("git", ["submodule", "update", "--init", "--recursive"])
-
     Logger.info("Compiling boringssl")
     System.cmd("cmake", ["-DBUILD_SHARED_LIBS=1", "."], cd: "third_party/boringssl")
     System.cmd("make", [], cd: "third_party/boringssl")

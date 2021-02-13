@@ -16,35 +16,45 @@ Future plans:
 
 ## Installation
 
-To successfully include `ex_quic` in your project you need to install:
+At this moment the package cannot be installed in your project. 
+The released versions doesn't work.
+As soon as server side will be implemented the package will be released on hex.
+However you can still download this repository and write some test code directly inside it.
+Below is short instruction.
+
+You will need:
 * cmake (for building boringssl and lsquic)
 * zlib (for lsquic)
 * libevent-dev (for lsquic)
 
-The package can be installed by adding `ex_quic` to your list of dependencies in `mix.exs`:
+After cloning repository you need to download submodules and use supported `boringssl` commit.
 
-```elixir
-def deps do
-  [
-    {:ex_quic, "~> 0.1.1"}
-  ]
-end
 ```
+git submodule update --init --recursive
+cd third_party/boringssl
+git checkout a2278d4d2cabe73f6663e3299ea7808edfa306b9
+```
+
+There is no need to compile `boringsssl` or `lsquic` on your own. 
+It will be done during library compilation. 
+
+That's it. Now you can test `ex_quic`.
 
 ## Quickstart
 At this moment `ExQuic.Client` is able to communicate with [echo_server] written in C so to test it
-you first need to start `echo_server`.
+you first need to compile and start `echo_server`.
 
+Compiling `echo_server` can be done by cloning and compiling `lsquic`.
+
+Starting `echo_server` can be done with following command.
 ```
-mix compile
-cd third_party/lsquic
 ./echo_server -c www.example.com,/path/to/server.cert,/path/to/server.key -s  127.0.0.3:8989
 ```
 
 Now you can write your own client and send a message to server from elixir
 ```elixir
 defmodule ExampleClient do
-  use ExQuic.Client
+  @behaviour ExQuic.Client
 
   @impl true
   def handle_quic_payload({:quic_payload, _payload} = msg) do
@@ -53,8 +63,8 @@ defmodule ExampleClient do
   end
 end
 
-{:ok, pid} = Example.start_link(remote_ip: "127.0.0.3", remote_port: 8989)
-Example.send_payload(pid, "hello\n")
+{:ok, pid} = ExQuic.Client.start_link(ExampleClient, remote_ip: "127.0.0.3", remote_port: 8989)
+ExQuic.Client.send_payload(pid, "hello\n")
 ```
 
 `echo_server` expects the message to be end with `\n`

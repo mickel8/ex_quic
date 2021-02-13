@@ -26,7 +26,7 @@ The package can be installed by adding `ex_quic` to your list of dependencies in
 ```elixir
 def deps do
   [
-    {:ex_quic, "~> 0.1.0"}
+    {:ex_quic, "~> 0.1.1"}
   ]
 end
 ```

@@ -1,7 +1,7 @@
 defmodule ExQuic.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.1.1"
   @github_url "https://github.com/mickel8/ex_quic"
 
   def project do
@@ -44,7 +44,15 @@ defmodule ExQuic.MixProject do
       maintainers: ["Membrane Team"],
       licenses: ["MIT"],
       links: %{"GitHub" => @github_url},
-      files: ["lib", "mix.exs", "README*", "LICENSE*", ".formatter.exs", "bundlex.exs", "c_src"]
+      files: [
+        "lib",
+        "mix.exs",
+        "README*",
+        "LICENSE*",
+        ".formatter.exs",
+        "bundlex.exs",
+        "c_src"
+      ]
     ]
   end
 

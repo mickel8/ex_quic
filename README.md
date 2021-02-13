@@ -59,6 +59,11 @@ Example.send_payload(pid, "hello\n")
 
 `echo_server` expects the message to be end with `\n`
 
+## Compilation warnings
+There might be a lot of warnings during compilation related with `libev`.
+They will be hopefully turned off in the future.
+For more information please refer to `libev` [documentation](http://pod.tst.eu/http://cvs.schmorp.de/libev/ev.pod#COMPILER_WARNINGS)
+
 ## Architecture
 ExQuic uses [bundlex] and [unifex] for compiling and spawning CNode that is responsible for doing
 all QUIC stuff using [lsquic].
